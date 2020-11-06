@@ -230,8 +230,6 @@ def main(ARGS):
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Executes transcribed command in another shell
-
-
 def execute_transcribed_command(command):
     # Calculates confiability based on all dictionary keys
     confiability_array = []
@@ -248,14 +246,12 @@ def execute_transcribed_command(command):
             chosen_command, confiability_array[max_confidence_index]))
 
         out = run_command(commands_dictionary[chosen_command])
-        eel.write_command(out)  # Outputs command stdout to eel process
+        eel.write_command_output(chosen_command, commands_dictionary[chosen_command], out)  # Outputs command stdout to eel process
         print(out)
     else:
         print("Comando não reconhecido.")
 
 # Run command and return decoded stdout in ASCII
-
-
 def run_command(command, output=True):
     # Run subprocess on a separate bash shell (that's why you need to declare virtualenv)
     process = subprocess.Popen(command, shell=True, executable='/bin/bash',
@@ -270,38 +266,31 @@ def run_command(command, output=True):
 if __name__ == '__main__':
     DEFAULT_SAMPLE_RATE = 16000
 
-    parser = argparse.ArgumentParser(
-        description="Stream from microphone to DeepSpeech using VAD")
+    parser = argparse.ArgumentParser(description="Stream from microphone to DeepSpeech using VAD")
 
-    parser.add_argument('-v', '--vad_aggressiveness', type=int, default=3,
-                        help="Set aggressiveness of VAD: an integer between 0 and 3, 0 being the least aggressive about filtering out non-speech, 3 the most aggressive. Default: 3")
-    parser.add_argument('--nospinner', action='store_true',
-                        help="Disable spinner")
-    parser.add_argument('-w', '--savewav',
-                        help="Save .wav files of utterences to given directory")
-    parser.add_argument('-f', '--file',
-                        help="Read from .wav file instead of microphone")
-
-    parser.add_argument('-m', '--model', required=True,
-                        help="Path to the model (protocol buffer binary file, or entire directory containing all standard-named files for model)")
-    parser.add_argument('-s', '--scorer',
-                        help="Path to the external scorer file.")
-    parser.add_argument('-d', '--device', type=int, default=None,
-                        help="Device input index (Int) as listed by pyaudio.PyAudio.get_device_info_by_index(). If not provided, falls back to PyAudio.get_default_device().")
-    parser.add_argument('-r', '--rate', type=int, default=DEFAULT_SAMPLE_RATE,
-                        help=f"Input device sample rate. Default: {DEFAULT_SAMPLE_RATE}. Your device may require 44100.")
+    parser.add_argument('-v', '--vad_aggressiveness', type=int, default=3, help="Set aggressiveness of VAD: an integer between 0 and 3, 0 being the least aggressive about filtering out non-speech, 3 the most aggressive. Default: 3")
+    parser.add_argument('--nospinner', action='store_true', help="Disable spinner")
+    parser.add_argument('-w', '--savewav', help="Save .wav files of utterences to given directory")
+    parser.add_argument('-f', '--file', help="Read from .wav file instead of microphone")
+    parser.add_argument('-m', '--model', required=True,help="Path to the model (protocol buffer binary file, or entire directory containing all standard-named files for model)")
+    parser.add_argument('-s', '--scorer', help="Path to the external scorer file.")
+    parser.add_argument('-d', '--device', type=int, default=None, help="Device input index (Int) as listed by pyaudio.PyAudio.get_device_info_by_index(). If not provided, falls back to PyAudio.get_default_device().")
+    parser.add_argument('-r', '--rate', type=int, default=DEFAULT_SAMPLE_RATE, help=f"Input device sample rate. Default: {DEFAULT_SAMPLE_RATE}. Your device may require 44100.")
 
     ARGS = parser.parse_args()
     if ARGS.savewav:
         os.makedirs(ARGS.savewav, exist_ok=True)
 
+    # Eel initialization and function declarations
     eel.init('web')
 
+    # Initialize VAD on clicking GUI button
     @eel.expose
     def initialize_vad():
         main(ARGS)
 
     eel.start('main.html', block=False)
 
+    # Main loop while VAD is not initialized
     while True:
         eel.sleep(1)
