@@ -1,0 +1,8 @@
+deepspeech==0.8.2
+numpy
+pyaudio
+webrtcvad
+fuzzywuzzy
+halo
+scipy
+eel

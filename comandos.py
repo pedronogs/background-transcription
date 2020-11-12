@@ -9,7 +9,6 @@ import os.path
 import deepspeech
 import numpy as np
 import pyaudio
-import wave
 import webrtcvad
 import subprocess
 from fuzzywuzzy import fuzz
