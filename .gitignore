@@ -1,3 +1,5 @@
 bin
 lib
 pyvenv.cfg
+server/node_modules
+server/package-lock.json

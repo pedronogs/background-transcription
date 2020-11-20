@@ -1,0 +1,29 @@
+{
+	"name": "background-transcription-api",
+	"version": "1.0.0",
+	"description": "API for DeepSpeech's transcription.",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pedronogs/deepspeech-web-inference.git"
+	},
+	"keywords": [
+		"deepspeech",
+		"models",
+		"training",
+		"inference"
+	],
+	"author": "pedronogs",
+	"license": "MIT",
+	"dependencies": {
+		"body-parser": "^1.19.0",
+		"express": "^4.17.1",
+		"multer": "^1.4.2",
+		"path": "^0.12.7",
+		"shelljs": "^0.8.4"
+	}
+}
