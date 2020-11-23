@@ -35,11 +35,13 @@ router.post('/services/transcribe', upload.single('wavfile'), function (req, res
 		`bash /home/pedronogs/Desktop/run_inference.sh -v /home/pedronogs/Desktop/deepspeech/bin/activate -m /home/pedronogs/Desktop/deepspeech_final_512.pb -a formatted_${uploadedFile}`
 	);
 
-	// Delete uploaded file after inference
-	fs.unlink(uploadedFile, function (err) {
-		if (err) {
-			console.log('Error when deleting file: ' + err);
-		}
+	// Delete uploaded files after inference
+	[`formatted_${uploadedFile}`, `${uploadedFile}`].forEach((file) => {
+		fs.unlink(file, function (err) {
+			if (err) {
+				console.log('Error when deleting file: ' + err);
+			}
+		});
 	});
 
 	// Return json with inference output

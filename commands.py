@@ -24,15 +24,15 @@ logging.basicConfig(level=20)
 
 # Pre-defined commands
 commands_dictionary = {
-    'abrir ??????': '???????',
+    'abrir ?': '?',
     'adicionar arquivos repositorio': 'git add .',
     'atualizar sistema': 'sudo apt-get update',
     'caminho': 'pwd',
     'chrome': 'google-chrome',
     'code': 'code .',
-    'comitar repositorio ????': 'git commit -m ?????',
-    'criar arquivo ??????': 'touch ?????',
-    'criar pasta ????????': 'mkdir ???????',
+    'comitar repositorio ?': 'git commit -m ?',
+    'criar arquivo ?': 'touch ?',
+    'criar pasta ?': 'mkdir ?',
     'disco': 'df',
     'discord': 'discord',
     'empurrar repositorio': 'git push origin main',
@@ -44,14 +44,14 @@ commands_dictionary = {
     'iniciar repositorio': 'git init',
     'limpar': 'comando eel',
     'listar': 'ls -la',
-    'localizar ????': 'find ?????',
+    'localizar ?': 'find ?',
     'mostrar historico': 'history',
     'processos': 'ps aux',
     'puxar repositorio': 'git pull origin main',
     'spotify': 'spotify', 
     'tempo': 'uptime',
-    'transcrever ???????': 'comando eel',
-    'versao ????': '???? --version'
+    'transcrever ?': 'comando eel',
+    'versao ?': '? --version'
 }
 
 
@@ -278,8 +278,13 @@ def execute_transcribed_command(command):
         print("Escolhido o comando '{}' com confiabilidade de {}%.".format(
             chosen_command, confiability_array[max_confidence_index]))
 
+        # Checks if command has extra variable argument or not
+        if ('?' in chosen_command):
+            splitted_command = command.split( );
+            commands_dictionary[chosen_command] = commands_dictionary[chosen_command].replace('?', splitted_command[len(splitted_command) - 1])
+
         out = run_command(commands_dictionary[chosen_command])
-        eel.write_command_output(chosen_command, commands_dictionary[chosen_command], out)  # Outputs command stdout to eel process
+        eel.write_command_output(command, chosen_command, commands_dictionary[chosen_command], out)  # Outputs command stdout to eel process
         print(out)
     else:
         print("Comando não reconhecido.")
@@ -308,7 +313,7 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--scorer', help="Path to the external scorer file.")
     parser.add_argument('-d', '--device', type=int, default=None, help="Device input index (Int) as listed by pyaudio.PyAudio.get_device_info_by_index(). If not provided, falls back to PyAudio.get_default_device().")
     parser.add_argument('-r', '--rate', type=int, default=DEFAULT_SAMPLE_RATE, help=f"Input device sample rate. Default: {DEFAULT_SAMPLE_RATE}. Your device may require 44100.")
-    parser.add_argument('--remote', default=False, help="Chose if you want to transcribe audio on an API instead of locally.")
+    parser.add_argument('--remote', default=False, help="Set remote server address if you want to transcribe audio on an API instead of locally.")
 
     ARGS = parser.parse_args()
 

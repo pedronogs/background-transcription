@@ -1,103 +1,103 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<title>DeepSpeech - Voice Activity Detection</title>
 
-<head>
-    <title>DeepSpeech - Voice Activity Detection</title>
+		<style>
+			html {
+				margin: 0;
+				height: 100%;
+			}
 
-    <style>
-        html {
-            margin: 0;
-            height: 100%;
-        }
+			body {
+				margin: 0;
+				min-height: 100%;
+			}
 
-        body {
-            margin: 0;
-            min-height: 100%;
-        }
+			pre {
+				margin: 0;
+				overflow-x: auto;
+				white-space: pre-wrap;
+				white-space: -moz-pre-wrap;
+				white-space: -pre-wrap;
+				white-space: -o-pre-wrap;
+				word-wrap: break-word;
+			}
 
-        pre {
-            margin: 0;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            white-space: -moz-pre-wrap;
-            white-space: -pre-wrap;
-            white-space: -o-pre-wrap;
-            word-wrap: break-word;
-        }
+			a {
+				cursor: pointer;
+			}
 
-        a {
-            cursor: pointer;
-        }
+			#container {
+				min-height: 100%;
+				display: flex;
+				flex-direction: row;
 
-        #container {
-            min-height: 100%;
-            display: flex;
-            flex-direction: row;
+				padding: 10px;
+			}
 
-            padding: 10px;
-        }
+			#output {
+				width: 70%;
+				height: 100%;
 
-        #output {
-            width: 70%;
-            height: 100%;
+				padding-right: 10px;
+				padding-left: 10px;
 
-            padding-right: 10px;
-            padding-left: 10px;
+				border: thin solid rgb(209, 209, 209);
+			}
 
-            border: thin solid rgb(209, 209, 209);
-        }
+			#buttons {
+				display: flex;
+				flex-direction: column;
 
-        #buttons {
-            display: flex;
-            flex-direction: column;
+				margin-left: 2%;
 
-            margin-left: 2%;
+				width: 25%;
+				height: 100%;
+			}
 
-            width: 25%;
-            height: 100%;
-        }
+			#buttons a {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
 
-        #buttons a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+				padding-top: 8px;
+				padding-bottom: 8px;
+				border-radius: 5px;
 
-            padding-top: 8px;
-            padding-bottom: 8px;
-            border-radius: 5px;
+				width: 100%;
+				height: 5%;
 
-            width: 100%;
-            height: 5%;
+				color: white;
+				font-weight: bolder;
+			}
+		</style>
+		<!-- Include eel.js - note this file doesn't exist in the 'web' directory -->
+		<script type="text/javascript" src="/eel.js"></script>
+		<script type="text/javascript">
+			// Command for writing the output of the command ran in the python subprocess
+			eel.expose(write_command_output);
+			function write_command_output(raw_transcription, sanitized_transcription, command, output) {
+				const $outputText = document.querySelector('#output-text');
 
-            color: white;
-            font-weight: bolder;
-        }
-    </style>
-    <!-- Include eel.js - note this file doesn't exist in the 'web' directory -->
-    <script type="text/javascript" src="/eel.js"></script>
-    <script type="text/javascript">
-        // Command for writing the output of the command ran in the python subprocess
-        eel.expose(write_command_output);
-        function write_command_output(transcribed_command, command, output) {
-            const $outputText = document.querySelector("#output-text");
+				$outputText.innerHTML += `<div style="border-bottom: thin solid black;"><br/><br/><strong>Raw Transcription: ${raw_transcription.replace(
+					'\n',
+					''
+				)}</strong><br /><strong>Sanitized Transcription: ${sanitized_transcription}</strong><br /><strong>Chosen Command: ${command}</strong><br /><br />${output}<br /><br /><br /></div>`;
+			}
+		</script>
+	</head>
 
-            $outputText.innerHTML += `<div style="border-bottom: thin solid black;"><br/><br/><strong>Transcription: ${transcribed_command}</strong><br /><strong>Command: ${command}</strong><br /><br />` + output + "<br /><br /><br /></div>";
-        }
+	<body>
+		<div id="container">
+			<div id="output">
+				<pre id="output-text"></pre>
+			</div>
 
-    </script>
-</head>
-
-<body>
-    <div id="container">
-        <div id="output">
-            <pre id="output-text"></pre>
-        </div>
-
-        <div id="buttons">
-            <a style="background-color: #1a7de6;" onclick="eel.initialize_vad()">Iniciar VAD</a>
-        </div>
-    </div>
-</body>
-
+			<div id="buttons">
+				<a style="background-color: #1a7de6" onclick="eel.initialize_vad()">Iniciar VAD</a>
+			</div>
+		</div>
+	</body>
 </html>
