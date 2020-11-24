@@ -24,7 +24,6 @@ logging.basicConfig(level=20)
 
 # Pre-defined commands
 commands_dictionary = {
-    'abrir ?': '?',
     'adicionar arquivos repositorio': 'git add .',
     'atualizar sistema': 'sudo apt-get update',
     'caminho': 'pwd',
@@ -50,7 +49,6 @@ commands_dictionary = {
     'puxar repositorio': 'git pull origin main',
     'spotify': 'spotify', 
     'tempo': 'uptime',
-    'transcrever ?': 'comando eel',
     'versao ?': '? --version'
 }
 
@@ -278,12 +276,18 @@ def execute_transcribed_command(command):
         print("Escolhido o comando '{}' com confiabilidade de {}%.".format(
             chosen_command, confiability_array[max_confidence_index]))
 
-        # Checks if command has extra variable argument or not
+        # Checks if command has any paramater or not (build multi-word parameter with _ as join character)
         if ('?' in chosen_command):
-            splitted_command = command.split( );
-            commands_dictionary[chosen_command] = commands_dictionary[chosen_command].replace('?', splitted_command[len(splitted_command) - 1])
+            splitted_command = command.split( )
+            splitted_chosen_command = chosen_command.split()
 
-        out = run_command(commands_dictionary[chosen_command])
+            joined_parameter = '_'.join(splitted_command[len(splitted_chosen_command) - 1:len(splitted_command)])
+
+            aux_command = commands_dictionary[chosen_command].replace('?', joined_parameter)
+            out = run_command(aux_command)
+        else:                          
+            out = run_command(commands_dictionary[chosen_command])
+
         eel.write_command_output(command, chosen_command, commands_dictionary[chosen_command], out)  # Outputs command stdout to eel process
         print(out)
     else:
