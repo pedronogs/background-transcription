@@ -86,6 +86,12 @@
 					''
 				)}</strong><br /><strong>Sanitized Transcription: ${sanitized_transcription}</strong><br /><strong>Chosen Command: ${command}</strong><br /><br />${output}<br /><br /><br /></div>`;
 			}
+
+			// Limpa comandos
+			eel.expose(limpar_tela);
+			function limpar_tela() {
+				document.querySelector('#output-text').innerHTML = '';
+			}
 		</script>
 	</head>
 
@@ -97,6 +103,7 @@
 
 			<div id="buttons">
 				<a style="background-color: #1a7de6" onclick="eel.initialize_vad()">Iniciar VAD</a>
+				<a style="margin-top: 20px; background-color: #10eb40" onclick="limpar_tela()">Limpar</a>
 			</div>
 		</div>
 	</body>

@@ -22,18 +22,18 @@ import requests
 
 logging.basicConfig(level=20)
 
-# Pre-defined commands
+# Pre-defined commands (commented ones don't work so well)
 commands_dictionary = {
     'adicionar arquivos repositorio': 'git add .',
-    'atualizar sistema': 'sudo apt-get update',
+    # 'atualizar sistema': 'sudo apt-get update',
     'caminho': 'pwd',
     'chrome': 'google-chrome',
     'code': 'code .',
-    'comitar repositorio ?': 'git commit -m ?',
+    'comitar repositorio ?': 'git commit -m "?"',
     'criar arquivo ?': 'touch ?',
     'criar pasta ?': 'mkdir ?',
     'disco': 'df',
-    'discord': 'discord',
+    # 'discord': 'discord',
     'empurrar repositorio': 'git push origin main',
     'estado repositorio': 'git status',
     'fechar': 'exit',
@@ -41,7 +41,7 @@ commands_dictionary = {
     'gedit': 'gedit',
     'gimp': 'gimp',
     'iniciar repositorio': 'git init',
-    'limpar': 'comando eel',
+    'limpar': 'javascript command',
     'listar': 'ls -la',
     'localizar ?': 'find ?',
     'mostrar historico': 'history',
@@ -49,7 +49,7 @@ commands_dictionary = {
     'puxar repositorio': 'git pull origin main',
     'spotify': 'spotify', 
     'tempo': 'uptime',
-    'versao ?': '? --version'
+    # 'versao ?': '? --version'
 }
 
 
@@ -275,6 +275,10 @@ def execute_transcribed_command(command):
 
         print("Escolhido o comando '{}' com confiabilidade de {}%.".format(
             chosen_command, confiability_array[max_confidence_index]))
+
+        # Clean GUI text
+        if (chosen_command == 'limpar'):
+            eel.limpar_tela()
 
         # Checks if command has any paramater or not (build multi-word parameter with _ as join character)
         if ('?' in chosen_command):
